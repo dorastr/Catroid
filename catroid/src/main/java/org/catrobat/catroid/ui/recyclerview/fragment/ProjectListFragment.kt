@@ -399,10 +399,23 @@ class ProjectListFragment(
         checkForEmptyList()
     }
 
+    private val itemList: List<ProjectData>
+        get() {
+            val items: MutableList<ProjectData> = ArrayList()
+            getLocalProjectList(items)
+            items.sortWith(Comparator { project1: ProjectData, project2: ProjectData ->
+                project2.lastUsed.compareTo(project1.lastUsed)
+            })
+            return items
+        }
+
     fun checkForEmptyList() {
         if (adapter.items.isEmpty()) {
             setShowProgressBar(true)
             if (projectManager.initializeDefaultProject()) {
+                // synchron so default project is shown immediately
+                items = itemList.toMutableList()
+
                 setAdapterItems(adapter.projectsSorted)
                 setShowProgressBar(false)
             } else {

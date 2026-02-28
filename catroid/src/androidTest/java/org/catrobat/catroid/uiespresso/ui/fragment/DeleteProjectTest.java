@@ -83,8 +83,9 @@ public class DeleteProjectTest {
 		openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getTargetContext());
 		onView(withText(R.string.delete)).perform(click());
 
-		onRecyclerView().atPosition(0)
-				.performCheckItemClick();
+		// more secure working with project name not position (correct position would be 1)
+		onView(withText(projectToDelete))
+				.perform(click());
 
 		onView(withId(R.id.confirm)).perform(click());
 
